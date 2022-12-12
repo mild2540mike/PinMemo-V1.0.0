@@ -122,8 +122,7 @@
                     }
                     return false;
                     }
-
-                el.innerHTML +='<a id="carosal" href="#" class="flex items-center lg:justify-center"><img class="rounded-full h-full hover:opacity-75" src="'+Images[m]+'"></a>';
+                el.innerHTML +='<a id="carosal" href="#" class="flex items-center lg:justify-center"><img class="rounded-full object-cover h-48 w-96 hover:opacity-75" src="'+Images[m]+'" alt="'+Images[m].slice(130,140)+'"></a>';
             }
             /********************************************************************/
             /********************* End get localStorage Images*******************/
@@ -196,7 +195,6 @@
         </div>
     </section>
     <!-- End block -->
-
 
     <!-- Start block -->
     <section class="bg-white dark:bg-gray-900">

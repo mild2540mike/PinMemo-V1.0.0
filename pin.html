@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="https://unpkg.com/tailwindcss@2.2.19/dist/tailwind.min.css" />
     <script src="https://unpkg.com/flowbite@1.5.4/dist/datepicker.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <link rel="stylesheet" href="./stylesheet.css" />
+    <link rel="stylesheet" href="./Assets/css/stylesheet.css" />
 	<script async type="text/javascript">
 		function initMap() {
             document.getElementById("lat").value = ''
@@ -73,7 +73,7 @@
                             <a href="./index.html" class="block py-2 pl-3 pr-4 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-purple-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700">Home</a>
                         </li>
                         <li>
-                            <a href="./pin.html" class="block py-2 pl-3 pr-4 text-white bg-purple-700 rounded lg:bg-transparent lg:text-purple-700 lg:p-0 dark:text-white">Pin</a>
+                            <a href="./pin.html" class="block py-2 pl-3 pr-4 text-white bg-purple-700 rounded lg:bg-transparent lg:text-purple-700 lg:p-0 dark:text-white">📍Pin</a>
                         </li>
                         <li>
                             <a href="./404.html" class="block py-2 pl-3 pr-4 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-purple-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700">Story</a>
@@ -281,7 +281,10 @@
         /********************************************************************/
         let file = document.getElementById("files").files[0];
 
-        if (file.size < 2097152) {
+        if (!file) {
+            Swal.fire({ icon: 'error', title: 'Error...', text: 'Something went wrong. Please Upload file!'});
+        } else {
+            if (file.size < 2097152) {
             create(
             document.getElementById('lat').value,
             document.getElementById('lng').value,
@@ -307,6 +310,7 @@
             } else {
                 Swal.fire({ icon: 'error', title: 'Error...', text: 'Something went wrong. Please limit file size 2MB!'});
             }
+        }
         /********************************************************************/
         /********************* End Upload Image to Firestore ****************/
         /********************************************************************/
@@ -341,7 +345,6 @@
         /*********************** End Add data to Firebase *******************/
         /********************************************************************/
         document.getElementById('files').addEventListener('input', (event) => {
-            // console.log(document.getElementById("files").files[0])
             document.getElementById("fileSize").innerHTML = '<b>ประเภทไฟล์: </b>'+document.getElementById("files").files[0].type+'<br>'+'<b>ขนาดไฟล์: </b>'+parseFloat((document.getElementById("files").files[0].size)/1024/1024).toFixed(2)+'MB'
         })
         

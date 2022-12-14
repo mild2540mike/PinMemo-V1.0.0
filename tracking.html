@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pin it go</title>
+    <link type="image/png" sizes="16x16" rel="icon" href="./Images/icons8-icons8-16.png">
     <link rel="stylesheet" href="https://unpkg.com/tailwindcss@2.2.19/dist/tailwind.min.css" />
     <script src="https://unpkg.com/flowbite@1.5.4/dist/datepicker.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -35,7 +36,7 @@
                 if (navigator.geolocation) {
                     var options = {timeout:60000};
 
-                    document.getElementById("speed").value = navigator.geolocation.speed
+                    
                     document.getElementById("onLine").value = navigator.onLine
                     // console.log(navigator.geolocation);
                     navigator.geolocation.watchPosition(showPosition, errorHandler, options);
@@ -62,6 +63,15 @@
                 }
 
                 function showLoc(position) {
+                    const s =  position.coords.speed;
+                    const speed = document.getElementById('speed').value = s;
+                    console.log(speed, ": Spedded")
+                    Swal.fire(
+                        'ทดสอบความเร็ว!',
+                        'คุณขับรถความเร็ว '+s+' km/h',
+                        'info'
+                        )
+                    console.log(s)
                     if (position.coords.speed > 5) {
                         Swal.fire(
                         'ช้าลงหน่อย!',
@@ -86,7 +96,7 @@
         <nav class="bg-white border-gray-200 py-2.5 dark:bg-gray-900">
             <div class="flex flex-wrap items-center justify-between max-w-screen-xl px-4 mx-auto">
                 <a href="./index.html" class="flex items-center">
-                    <img src="./images/logo.svg" class="h-6 mr-3 sm:h-9" alt="Landwind Logo" />
+                    <img src="./images/icons8-64.svg" class="h-6 mr-1 sm:h-9" alt="Landwind Logo" />
                     <span class="self-center text-xl font-semibold whitespace-nowrap dark:text-white">ไปเที่ยวกัน</span>
                 </a>
                 <div class="flex items-center lg:order-2">

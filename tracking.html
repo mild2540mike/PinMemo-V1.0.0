@@ -63,19 +63,12 @@
                 }
 
                 function showLoc(position) {
-                    const s =  position.coords.speed;
-                    const speed = document.getElementById('speed').value = s;
-                    console.log(speed, ": Spedded")
-                    Swal.fire(
-                        'ทดสอบความเร็ว!',
-                        'คุณขับรถความเร็ว '+s+' km/h',
-                        'info'
-                        )
-                    console.log(s)
-                    if (position.coords.speed > 5) {
+                    const speed =  parseInt(position.coords.speed*3.6);
+                    document.getElementById('speed').value = speed;
+                    if (speed > 40) {
                         Swal.fire(
                         'ช้าลงหน่อย!',
-                        'คุณขับรถความเร็วเกิน 5 km/h',
+                        'คุณขับรถความเร็วเกิน 40 km/h',
                         'warning'
                         )
                     }

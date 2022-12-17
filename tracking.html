@@ -11,77 +11,118 @@
     <script src="https://unpkg.com/flowbite@1.5.4/dist/datepicker.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="./Assets/css/stylesheet.css" />
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
 	<script async type="text/javascript">
-		function initMap() {
+		// function initMap() {
 
-			var bangkok = {
-				lat: 13.8002833,
-				lng: 100.5400389
-			};
-			var map = new
-			google.maps.Map(document.getElementById('map'), {
-				center: bangkok,
-				scrollwheel: true,
-				zoom: 10
-			});
+		// 	var bangkok = {
+		// 		lat: 13.8002833,
+		// 		lng: 100.5400389
+		// 	};
+		// 	var map = new
+		// 	google.maps.Map(document.getElementById('map'), {
+		// 		center: bangkok,
+		// 		scrollwheel: true,
+		// 		zoom: 10
+		// 	});
 
-            function errorHandler(err) {
-            if (err.code == 1) {
-               alert("Error: Access is denied!");
-            } else if ( err.code == 2) {
-               alert("Error: Position is unavailable!");
-            }
-            }
+        //     function errorHandler(err) {
+        //     if (err.code == 1) {
+        //        alert("Error: Access is denied!");
+        //     } else if ( err.code == 2) {
+        //        alert("Error: Position is unavailable!");
+        //     }
+        //     }
 
-            function getmap() {
-                if (navigator.geolocation) {
-                    var options = {timeout:60000};
+        //     function getmap() {
+        //         if (navigator.geolocation) {
+        //             var options = {timeout:60000};
 
                     
-                    document.getElementById("onLine").value = navigator.onLine
-                    // console.log(navigator.geolocation);
-                    navigator.geolocation.watchPosition(showPosition, errorHandler, options);
-                    navigator.geolocation.getCurrentPosition(showLoc);
-                    // navigator.geolocation.getCurrentPosition(showPosition);
-                } else { 
-                    x.innerHTML = "Geolocation is not supported by this browser.";
-                }
+        //             document.getElementById("onLine").value = navigator.onLine
+        //             // console.log(navigator.geolocation);
+        //             navigator.geolocation.watchPosition(showPosition, errorHandler, options);
+        //             navigator.geolocation.getCurrentPosition(showLoc);
+        //             // navigator.geolocation.getCurrentPosition(showPosition);
+        //         } else { 
+        //             x.innerHTML = "Geolocation is not supported by this browser.";
+        //         }
 
-                function showPosition(position) {
-                    var marker = new google.maps.Marker({
-                    position: new google.maps.LatLng([position.coords.latitude], [position.coords.longitude]),
-                    icon: './Images/location-circle-svgrepo-com.svg',
-                    map: map,
-                    draggable: false
-                    });
-                    navigator.geolocation.clearWatch(marker);
-                    // console.log(marker)
+        //         function showPosition(position) {
+        //             var marker = new google.maps.Marker({
+        //             position: new google.maps.LatLng([position.coords.latitude], [position.coords.longitude]),
+        //             icon: './Images/location-circle-svgrepo-com.svg',
+        //             map: map,
+        //             draggable: false
+        //             });
+        //             navigator.geolocation.clearWatch(marker);
+        //             // console.log(marker)
 
-                    // var info = new google.maps.InfoWindow({
-                    //     content: "<div id='info' style='font-size:12pt;'>Online</div>"
-                    // });
-                    // info.open(map, marker);
-                }
+        //             // var info = new google.maps.InfoWindow({
+        //             //     content: "<div id='info' style='font-size:12pt;'>Online</div>"
+        //             // });
+        //             // info.open(map, marker);
+        //         }
 
-                function showLoc(position) {
-                    const speed =  parseInt(position.coords.speed*3.6);
-                    document.getElementById('speed').value = speed;
-                    if (speed > 40) {
-                        Swal.fire(
-                        'ช้าลงหน่อย!',
-                        'คุณขับรถความเร็วเกิน 40 km/h',
-                        'warning'
-                        )
-                    }
-                }
+        //         function showLoc(position) {
+        //             const speed =  parseInt(position.coords.speed*3.6);
+        //             document.getElementById('speed').value = speed;
+        //             if (speed > 40) {
+        //                 Swal.fire(
+        //                 'ช้าลงหน่อย!',
+        //                 'คุณขับรถความเร็วเกิน 40 km/h',
+        //                 'warning'
+        //                 )
+        //             }
+        //         }
                 
-			}
-            setInterval(getmap,1000);
-		}
+		// 	}
+        //     setInterval(getmap,1000);
+		// }
 
-        window.initMap = initMap;
+        // window.initMap = initMap;
 
-	</script>
+
+// Note: This example requires that you consent to location sharing when
+// prompted by your browser. If you see the error "The Geolocation service
+// failed.", it means you probably did not give permission for the browser to
+// locate you.
+
+    function initMap() {
+    const center = new google.maps.LatLng(13.8002833, 100.5400389);
+    const map = new google.maps.Map(document.getElementById("map"), {
+        zoom: 11,
+        center: center,
+    });
+    var getpos = (function getPosition(){
+        var position = navigator.geolocation.getCurrentPosition(showPosition);
+    return getPosition;
+    }())
+
+    function showPosition(position, error) {
+        // ####################### Online Status #######################
+        document.getElementById("onLine").value = navigator.onLine
+        // ####################### Speed (km/h) ########################
+        document.getElementById('speed').value = parseInt(position.coords.speed*3.6);
+
+        console.log(position)
+        const pin = new google.maps.Marker({
+        position: new google.maps.LatLng([position.coords.latitude], [position.coords.longitude]),
+        icon: './Images/location-circle-svgrepo-com.svg',
+        map: map,
+     });
+    }
+
+    
+    setInterval(getpos,1000);
+
+}
+
+window.initMap = initMap;
+
+
+
+</script>
 </head>
 <body>
 

@@ -268,8 +268,6 @@
         };
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
-        // firebase.analytics();
-
         /********************************************************************/
         /**************** End Setup Environment firebaseConfig **************/
         /********************************************************************/
@@ -304,7 +302,6 @@
             document.getElementById('date_place').value,
             document.getElementById('message').value,
             )
-            Swal.fire('Successful!', 'เพิ่มสถานที่ที่คุณไปสำเร็จ', 'success')
 
             var storageref = firebase.storage().ref('Album');
             var thisref = storageref.child(file.name).put(file);
@@ -314,9 +311,10 @@
                     Swal.fire({ icon: 'error', title: 'Error...', text: 'Something went wrong. Please try again later!'});
                 }
             }, function() {
-            // Uploaded completed successfully, now we can get the download URL
             thisref.snapshot.ref.getDownloadURL().then(function(downloadURL) {
                 firebase.database().ref('ImagesAlbum').push(document.getElementById("url").value = downloadURL)
+                
+                Swal.fire('Successful!', 'เพิ่มสถานที่ที่คุณไปสำเร็จ', 'success')
             });
             });
             } else {

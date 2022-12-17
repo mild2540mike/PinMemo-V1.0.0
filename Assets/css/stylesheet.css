@@ -42,6 +42,10 @@
   .title {
     font-weight: bold;
   }
+
+  [x-cloak] {
+    display: none;
+  }
   
   #infowindow-content {
     display: none;

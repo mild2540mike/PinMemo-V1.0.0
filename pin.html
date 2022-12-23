@@ -16,6 +16,7 @@
             document.getElementById("lat").value = ''
 			document.getElementById("lng").value = ''
             document.getElementById("fileSize").innerHTML = ''
+            document.getElementById("place_name").value = ''
 
 			var bangkok = {
 				lat: 13.8002833,
@@ -41,9 +42,18 @@
 				});
                 info.open(map, marker);
 
+                var geocoder = new google.maps.Geocoder();
+                geocoder.geocode({'latLng': e.latLng}, function(results, status) {
+                if (status == google.maps.GeocoderStatus.OK) {
+                    let locationName = results[0];
+                    let placeName = document.querySelector('div.title.full-width');
+
+				    document.getElementById("place_name").value = ((!placeName)? '': placeName.innerHTML)
+                    }
+                });
+
 				document.getElementById("lat").value = e.latLng.lat();
 				document.getElementById("lng").value = e.latLng.lng();
-
                 }
 			});
 		}
@@ -306,11 +316,10 @@
                     Swal.fire({ icon: 'error', title: 'Error...', text: 'Something went wrong. Please try again later!'});
                 }
             }, function() {
-            thisref.snapshot.ref.getDownloadURL().then(function(downloadURL) {
+              thisref.snapshot.ref.getDownloadURL().then(function(downloadURL) {
                 firebase.database().ref('ImagesAlbum').push(document.getElementById("url").value = downloadURL)
-                
                 Swal.fire('Successful!', 'เพิ่มสถานที่ที่คุณไปสำเร็จ', 'success')
-            });
+              });
             });
             } else {
                 Swal.fire({ icon: 'error', title: 'Error...', text: 'Something went wrong. Please limit file size 2MB!'});

@@ -63,6 +63,7 @@
         });
         // Initialize the marker
         var marker = new google.maps.Marker({
+            position: {lat: -34.397, lng: 150.644},
             map: map,
             icon: './Images/location-circle-svgrepo-com.svg',
             title: 'Device Location',
@@ -75,16 +76,30 @@
 
         if (navigator.geolocation) {
         navigator.geolocation.watchPosition(function(position) {
-            var pos = {
+            var pos = [{
+                lat: position.coords.latitude,
+                lng: position.coords.longitude
+            },
+            {
                 lat: position.coords.latitude,
                 lng: position.coords.longitude
             }
+        ]
+            for (var i = 0; i < pos.length; i++) {
+                let data = Object.values(pos);
+                var location = {lat: data[0].lat, lng: data[0].lng}
+                var location2 = {lat: data[1].lat+0.00001, lng: data[1].lng+0.000001}
+                marker.setPosition(location);
+                map.setCenter(location);
 
-            marker.setPosition(pos);
-            map.setCenter(pos);
-
+                marker2.setPosition(location2);
+                map.setCenter(location2);
+            }
+            
             var speed = parseInt(position.coords.speed*3.6);
             var statusdevices = navigator.onLine;
+
+
 
         // ####################### Online Status #######################
             document.getElementById("onLine").value = statusdevices;
@@ -97,7 +112,39 @@
         // Browser doesn't support Geolocation
         handleLocationError(false, marker, map.getCenter());
         }
-          // Add a style-selector control to the map.
+
+        let speed = document.getElementById('speed').value  
+        const contentString =
+            `<div id="content">
+            <div id="siteNotice">
+            </div>
+            <h1 id="firstHeading" class="firstHeading"><b>Mike</b></h1>
+            <div id="bodyContent">
+            <p>ความเร็ว: ${((speed == 0)? 0: speed)} (km/h)</p>
+            <span>สถานะการเชื่อมต่อ: online</span>
+            <p id="battery">แบตเตอรี่: 100%</p>
+            <p>(last Update 3 sec.)</p>
+            </div>
+            </div>`;
+
+        const infowindow = new google.maps.InfoWindow({
+            content: contentString,
+            ariaLabel: "Uluru",
+        });
+
+        infowindow.open({
+            anchor: marker,
+            map,
+        });
+
+        marker.addListener("click", () => {
+            infowindow.open({
+            anchor: marker,
+            map,
+            });
+        });
+
+        // Add a style-selector control to the map.
         const styleControl = document.getElementById("style-selector-control");
 
         map.controls[google.maps.ControlPosition.TOP_LEFT].push(styleControl);

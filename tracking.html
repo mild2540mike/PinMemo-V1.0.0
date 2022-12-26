@@ -21,46 +21,6 @@
             center: {lat: 13.8002833, lng: 100.5400389},
             zoom: 16
         });
-
-    navigator.getBattery().then(function(battery) {
-    battery.addEventListener('levelchange', function() {    
-        // Do stuff when the level changes, you can get it
-        // from battery.level
-    var levelbattery = (battery.level*100)+"%";
-    })
-    var battery = (battery.level*100)+"%"
-    document.getElementById('battery').value = battery
-    });
-
-    let batteryIsCharging = false;
-    navigator.getBattery().then((battery) => {
-    batteryIsCharging = battery.charging;
-    document.getElementById('charging').value = ((batteryIsCharging == true) ? 'charging' : 'no charging');
-      battery.addEventListener('chargingchange', () => {
-       batteryIsCharging = battery.charging;
-      });
-    });
-
-        var speed = document.getElementById('speed').value  
-        console.log(speed)
-    
-        const contentString =
-            `<div id="content">
-            <div id="siteNotice">
-            </div>
-            <h1 id="firstHeading" class="firstHeading"><b>Mike</b></h1>
-            <div id="bodyContent">
-            <p>ความเร็ว: ${((speed == 0)? 0: speed)} (km/h)</p>
-            <span>สถานะการเชื่อมต่อ: online</span>
-            <p id="battery">แบตเตอรี่: 100%</p>
-            <p>(last Update 3 sec.)</p>
-            </div>
-            </div>`;
-
-        const infowindow = new google.maps.InfoWindow({
-            content: contentString,
-            ariaLabel: "Uluru",
-        });
         // Initialize the marker
         var marker = new google.maps.Marker({
             position: {lat: -34.397, lng: 150.644},
@@ -112,25 +72,6 @@
         // Browser doesn't support Geolocation
         handleLocationError(false, marker, map.getCenter());
         }
-
-        let speed = document.getElementById('speed').value  
-        const contentString =
-            `<div id="content">
-            <div id="siteNotice">
-            </div>
-            <h1 id="firstHeading" class="firstHeading"><b>Mike</b></h1>
-            <div id="bodyContent">
-            <p>ความเร็ว: ${((speed == 0)? 0: speed)} (km/h)</p>
-            <span>สถานะการเชื่อมต่อ: online</span>
-            <p id="battery">แบตเตอรี่: 100%</p>
-            <p>(last Update 3 sec.)</p>
-            </div>
-            </div>`;
-
-        const infowindow = new google.maps.InfoWindow({
-            content: contentString,
-            ariaLabel: "Uluru",
-        });
 
         infowindow.open({
             anchor: marker,

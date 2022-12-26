@@ -82,13 +82,6 @@
             localStorage.setItem('Firestore', JSON.stringify(snap.val()));
         });
         firebase.database().ref('ImagesAlbum').on('value',(snap)=>{
-
-            // var ImagesURL = Object.values(snap.val());
-            // for (var i = 0 ; i < Images.length; i++) {
-            //     console.log(ImagesURL[i])
-
-            // }
-
             localStorage.setItem('Imagestore', JSON.stringify(snap.val()));
         });
         /********************************************************************/
@@ -132,9 +125,6 @@
 			});
 
             for (i = 0; i < data.length; i++) {
-            // var lat = Number(data[i].lat)
-            // var lng = Number(data[i].lng)
-                // console.log(lat, lng);
             var marker = new google.maps.Marker({
             position: new google.maps.LatLng([data[i].lat], [data[i].lng]),
 			map: map,
@@ -146,13 +136,6 @@
 			});
             info.open(map, marker);
 
-            // document.getElementById('images-list').onclick = (e) => {
-            // if (e.path[0].localName === 'img') {
-            //     // console.log(e)
-            //     map.setCenter({lat: lat, lng: lng});
-            // }
-            // return false;
-            //         }
             }
 
         /********************************************************************/
@@ -196,6 +179,7 @@
 
 		}
         window.initMap = initMap;
+        
 
 	</script>
 </head>

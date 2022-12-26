@@ -41,9 +41,67 @@
       });
     });
 
-        var speed = document.getElementById('speed').value  
-        console.log(speed)
-    
+        // Initialize the marker
+        var marker = new google.maps.Marker({
+            map: map,
+            icon: './Images/location-circle-svgrepo-com.svg',
+            title: 'Device Location',
+            mapTypeControl: false,
+        });
+
+        var marker2 = new google.maps.Marker({
+            map: map,
+            icon: './Images/location-circle-svgrepo-com-orange.svg',
+            title: 'Device Location',
+            mapTypeControl: false,
+        });
+
+        const trafficLayer = new google.maps.TrafficLayer();
+        trafficLayer.setMap(map);
+
+        const transitLayer = new google.maps.TransitLayer();
+        transitLayer.setMap(map);
+
+        if (navigator.geolocation) {
+        navigator.geolocation.watchPosition(function(position) {
+            var pos = [{
+                lat: position.coords.latitude,
+                lng: position.coords.longitude
+            },
+            {
+                lat: position.coords.latitude,
+                lng: position.coords.longitude
+            }
+        ]
+            for (var i = 0; i < pos.length; i++) {
+                let data = Object.values(pos);
+                var location = {lat: data[0].lat, lng: data[0].lng}
+                var location2 = {lat: data[1].lat+0.00001, lng: data[1].lng+0.000001}
+                marker.setPosition(location);
+                map.setCenter(location);
+
+                marker2.setPosition(location2);
+                map.setCenter(location2);
+            }
+            
+            var speed = parseInt(position.coords.speed*3.6);
+            var statusdevices = navigator.onLine;
+
+
+
+        // ####################### Online Status #######################
+            document.getElementById("onLine").value = ((statusdevices == true) ? 'online' : 'offline');
+        // ####################### Speed (km/h) ########################
+            document.getElementById('speed').value = speed;
+        }, function() {
+            handleLocationError(true, marker, map.getCenter());
+        });
+        } else {
+        // Browser doesn't support Geolocation
+        handleLocationError(false, marker, map.getCenter());
+        }
+
+        let speed = document.getElementById('speed').value  
         const contentString =
             `<div id="content">
             <div id="siteNotice">
@@ -61,44 +119,6 @@
             content: contentString,
             ariaLabel: "Uluru",
         });
-        // Initialize the marker
-        var marker = new google.maps.Marker({
-            position: {lat: -34.397, lng: 150.644},
-            map: map,
-            icon: './Images/location-circle-svgrepo-com.svg',
-            title: 'Device Location',
-            mapTypeControl: false,
-        });
-
-        const trafficLayer = new google.maps.TrafficLayer();
-        trafficLayer.setMap(map);
-
-        const transitLayer = new google.maps.TransitLayer();
-        transitLayer.setMap(map);
-
-        if (navigator.geolocation) {
-        navigator.geolocation.watchPosition(function(position) {
-            var pos = {
-            lat: position.coords.latitude,
-            lng: position.coords.longitude
-            };
-            var speed = parseInt(position.coords.speed*3.6);
-            var statusdevices = navigator.onLine;
-
-            marker.setPosition(pos);
-            map.setCenter(pos);
-
-        // ####################### Online Status #######################
-            document.getElementById("onLine").value = ((statusdevices == true) ? 'online' : 'offline');
-        // ####################### Speed (km/h) ########################
-            document.getElementById('speed').value = speed;
-        }, function() {
-            handleLocationError(true, marker, map.getCenter());
-        });
-        } else {
-        // Browser doesn't support Geolocation
-        handleLocationError(false, marker, map.getCenter());
-        }
 
         infowindow.open({
             anchor: marker,

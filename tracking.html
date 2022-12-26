@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="./Assets/css/stylesheet.css" />
     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
 	<script async type="text/javascript">
-        
+
     var map;
 
     function initMap() {
@@ -21,9 +21,90 @@
             center: {lat: 13.8002833, lng: 100.5400389},
             zoom: 16
         });
+
+    navigator.getBattery().then(function(battery) {
+    battery.addEventListener('levelchange', function() {    
+        // Do stuff when the level changes, you can get it
+        // from battery.level
+    var levelbattery = (battery.level*100)+"%";
+    })
+    var battery = (battery.level*100)+"%"
+    document.getElementById('battery').value = battery
+    });
+
+    let batteryIsCharging = false;
+    navigator.getBattery().then((battery) => {
+    batteryIsCharging = battery.charging;
+    document.getElementById('charging').value = ((batteryIsCharging == true) ? 'charging' : 'no charging');
+      battery.addEventListener('chargingchange', () => {
+       batteryIsCharging = battery.charging;
+      });
+    });
+
+
+        document.getElementById('btnconnect').addEventListener("click", (e) => {
+        
+        let speed = document.querySelector('input#speed').value;
+        let batterys =  document.querySelector('input#battery').value;
+        let chargings =  document.querySelector('input#charging').value;
+
+        const contentString =
+            `<div id="content">
+            </div>
+            <h1 id="firstHeading" class="firstHeading"><b>Mike</b></h1>
+            <div id="bodyContent">
+            <p>ความเร็ว: ${((speed == 0)? 0: speed)} (km/h)</p>
+            <p>สถานะการเชื่อมต่อ: online</p>
+            <p>แบตเตอรี่: ${batterys}</p> 
+            <p>สถานะ: ${chargings}</p>
+            <p>(last Update 3 sec.)</p>
+            </div>`;
+
+        const infowindow = new google.maps.InfoWindow({
+            content: contentString,
+            ariaLabel: "Bangkok",
+        });
+            
+        document.getElementById('conn-device').classList.remove('hidden');
+        document.getElementById('btnconnect').style.display = "none";
+
+        if (navigator.geolocation) {
+        navigator.geolocation.watchPosition(function(position) {
+            var pos = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude
+            }
+            
+            var speed = parseInt(position.coords.speed*3.6);
+            var statusdevices = navigator.onLine;
+
+            marker.setPosition(pos);
+            map.setCenter(pos);
+
+            document.getElementById("onLine").value = ((statusdevices == true) ? 'online' : 'offline');
+            document.getElementById('speed').value = speed;
+        }, function() {
+            handleLocationError(true, marker, map.getCenter());
+        });
+        } else {
+        handleLocationError(false, marker, map.getCenter());
+        }
+
+        infowindow.open({
+            anchor: marker,
+            map,
+        });
+
+        marker.addListener("click", () => {
+            infowindow.open({
+            anchor: marker,
+            map,
+            });
+        });
+        
+        })
         // Initialize the marker
         var marker = new google.maps.Marker({
-            position: {lat: -34.397, lng: 150.644},
             map: map,
             icon: './Images/location-circle-svgrepo-com.svg',
             title: 'Device Location',
@@ -32,58 +113,52 @@
 
         const trafficLayer = new google.maps.TrafficLayer();
         trafficLayer.setMap(map);
-        
 
-        if (navigator.geolocation) {
-        navigator.geolocation.watchPosition(function(position) {
-            var pos = [{
-                lat: position.coords.latitude,
-                lng: position.coords.longitude
-            },
-            {
-                lat: position.coords.latitude,
-                lng: position.coords.longitude
-            }
-        ]
-            for (var i = 0; i < pos.length; i++) {
-                let data = Object.values(pos);
-                var location = {lat: data[0].lat, lng: data[0].lng}
-                var location2 = {lat: data[1].lat+0.00001, lng: data[1].lng+0.000001}
-                marker.setPosition(location);
-                map.setCenter(location);
-
-                marker2.setPosition(location2);
-                map.setCenter(location2);
-            }
-            
-            var speed = parseInt(position.coords.speed*3.6);
-            var statusdevices = navigator.onLine;
+        const transitLayer = new google.maps.TransitLayer();
+        transitLayer.setMap(map);
 
 
-
-        // ####################### Online Status #######################
-            document.getElementById("onLine").value = statusdevices;
-        // ####################### Speed (km/h) ########################
-            document.getElementById('speed').value = speed;
-        }, function() {
-            handleLocationError(true, marker, map.getCenter());
-        });
-        } else {
-        // Browser doesn't support Geolocation
-        handleLocationError(false, marker, map.getCenter());
-        }
-          // Add a style-selector control to the map.
+        // Add a style-selector control to the map.
         const styleControl = document.getElementById("style-selector-control");
 
-        map.controls[google.maps.ControlPosition.TOP_LEFT].push(styleControl);
+        map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(styleControl);
 
         // Set the map's style to the initial value of the selector.
-        const styleSelector = document.getElementById("style-selector");
+        const styleSelector = document.getElementById("style-selector-control");
 
         map.setOptions({ styles: styles[styleSelector.value] });
         // Apply new JSON when the user selects a different style.
-        styleSelector.addEventListener("change", () => {
-        map.setOptions({ styles: styles[styleSelector.value] });
+        styleSelector.addEventListener("click", (e) => {
+
+            var value = parseInt(document.getElementById('number').value, 10);
+            value = isNaN(value) ? 0 : value;
+            value++;
+            const theme = document.getElementById('number').value = value;
+
+            if (theme == 1) {
+                document.getElementById('svgThemes').setAttribute('fill','rgba(59, 130, 246, 0.5)');
+                styleSelector.value = "default";
+                map.setOptions({ styles: styles[styleSelector.value] });
+            } else if (theme == 2) {
+                document.getElementById('svgThemes').setAttribute('fill','silver');
+                styleSelector.value = "silver";
+                map.setOptions({ styles: styles[styleSelector.value] });
+            } else if (theme == 3) {
+                document.getElementById('svgThemes').setAttribute('fill','#ffa31a');
+                styleSelector.value = "night";
+                map.setOptions({ styles: styles[styleSelector.value] });
+            } else if (theme == 4) {
+                document.getElementById('svgThemes').setAttribute('fill','#fff');
+                styleSelector.value = "hiding";
+                map.setOptions({ styles: styles[styleSelector.value] });
+            } else {
+                document.getElementById('svgThemes').setAttribute('fill','yellow');
+                document.getElementById('number').value = 0;
+                value = 0;
+                styleSelector.value = "retro";
+                map.setOptions({ styles: styles[styleSelector.value] });
+            }    
+
         });
         }
 
@@ -394,7 +469,6 @@
                     <span class="self-center text-xl font-semibold whitespace-nowrap dark:text-white">ไปเที่ยวกัน</span>
                 </a>
                 <div class="flex items-center lg:order-2">
-                    <!-- <a href="#" class="text-gray-800 dark:text-white hover:bg-gray-50 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 sm:mr-2 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800">Log in</a> -->
                     <a href="#" onclick="window.location.reload();" class="text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 sm:mr-2 lg:mr-0 dark:bg-purple-600 dark:hover:bg-purple-700 focus:outline-none dark:focus:ring-purple-800">Refash</a>
                     <button type="button" data-collapse-toggle="mobile-menu-2" class="text-gray-500 w-10 h-10 relative focus:outline-none bg-white lg:hidden" aria-controls="mobile-menu-2" aria-expanded="false" @click="open = !open">
                         <span class="sr-only">Open main menu</span>
@@ -427,32 +501,39 @@
             </div>
         </nav>
     </header>
-     <!-- End Navbar -->
+
+    <!-- Start block -->
+    <input type="hidden" id="number" value="0"/>
+    <button value="retro" id="style-selector-control" class="z-10 inline-flex items-center py-3 px-2.5 mr-2 shadow-lg border divide-slate-400 rounded text-sm font-medium text-center text-gray-500 bg-gray-100 hover:bg-gray-200 focus:outline-none focus:ring-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700 dark:text-white dark:border-gray-600" type="button" aria-label="themes">
+        <svg id="svgThemes" fill="yellow" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>
+    </button>
+    <!-- End block -->
 
     <!-- Start block -->
     <section class="pt-7 bg-gray-50 dark:bg-gray-800">
         <div class="max-w-screen-xl px-4 py-8 mx-auto lg:py-16 lg:px-6">
-            <div id="style-selector-control" class="map-control bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block mt-2.5 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                <label for="style-selector">ธีม:</label>
-                <select id="style-selector" class="selector-control">
-                  <option value="default">Default</option>
-                  <option value="silver">Silver</option>
-                  <option value="night">Night mode</option>
-                  <option value="retro" selected="selected">Retro</option>
-                  <option value="hiding">Hide features</option>
-                </select>
-            </div>
-
             <div id="map"></div>
-            <form id="add-album">
+            <button id="btnconnect" type="button" class="mt-8 text-gray-900 bg-white hover:bg-gray-100 border border-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2 text-center inline-flex items-center dark:focus:ring-gray-600 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:bg-gray-700 mr-2 mb-2">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                Connect
+              </button>
+            <form class="hidden" id="conn-device">
                 <div class="grid grid-cols-2 gap-2 my-5">
                     <div class="mb-6">
                         <label for="text" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Speed (km/h)</label>
                         <input type="text" id="speed" class="t-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 disabled:bg-slate-50 disabled:text-slate-500 disabled:border-slate-200 disabled:shadow-none" aria-label="appversion" disabled />
                     </div>
                     <div class="mb-6">
-                        <label for="text" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Online Status</label>
-                        <input type="text" id="onLine" class="t-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 disabled:bg-slate-50 disabled:text-slate-500 disabled:border-slate-200 disabled:shadow-none" aria-label="Online Status" disabled />
+                        <label for="text" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">online status</label>
+                        <input type="text" id="onLine" class="t-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 disabled:bg-slate-50 disabled:text-slate-500 disabled:border-slate-200 disabled:shadow-none" aria-label="online status" disabled />
+                    </div>
+                    <div class="mb-6">
+                        <label for="text" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">battery</label>
+                        <input type="text" id="battery" class="t-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 disabled:bg-slate-50 disabled:text-slate-500 disabled:border-slate-200 disabled:shadow-none" aria-label="battery" disabled />
+                    </div>
+                    <div class="mb-6">
+                        <label for="text" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">charging status</label>
+                        <input type="text" id="charging" class="t-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 disabled:bg-slate-50 disabled:text-slate-500 disabled:border-slate-200 disabled:shadow-none" aria-label="charging Status" disabled />
                     </div>
                 </div>
         </form>

@@ -72,20 +72,7 @@
         // Browser doesn't support Geolocation
         handleLocationError(false, marker, map.getCenter());
         }
-
-        infowindow.open({
-            anchor: marker,
-            map,
-        });
-
-        marker.addListener("click", () => {
-            infowindow.open({
-            anchor: marker,
-            map,
-            });
-        });
-
-        // Add a style-selector control to the map.
+          // Add a style-selector control to the map.
         const styleControl = document.getElementById("style-selector-control");
 
         map.controls[google.maps.ControlPosition.TOP_LEFT].push(styleControl);

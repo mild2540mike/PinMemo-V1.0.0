@@ -86,3 +86,149 @@
       transition: 500ms ease;
     
   }
+
+
+/* *****************************************************************************************************************************************/
+/* ****************************************************** FireWorks ************************************************************************/
+/* ****************************************************************************************************************************************/
+
+  @keyframes firework {
+    0% { 
+      transform: translate(-50%, 60vh);
+      width: 0.5vmin;
+      opacity: 1;
+    }
+    50% { 
+      width: 0.5vmin;
+      opacity: 1;
+    }
+    100% { 
+      width: 45vmin; 
+      opacity: 0; 
+    }
+  }
+  
+  .firework,
+  .firework::before,
+  .firework::after {
+    --top: 60vh;
+    content: "";
+    position: absolute;
+    top: 10%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 0.5vmin;
+    aspect-ratio: 1;
+    background:
+      /* random backgrounds */
+      radial-gradient(circle, #ff0 0.2vmin, #0000 0) 50% 00%,
+      radial-gradient(circle, rgb(31, 210, 79) 0.3vmin, #0000 0) 00% 50%,
+      radial-gradient(circle, rgb(201, 28, 86) 0.5vmin, #0000 0) 50% 99%,
+      radial-gradient(circle, rgb(61, 61, 26) 0.2vmin, #0000 0) 99% 50%,
+      radial-gradient(circle, rgb(26, 183, 39) 0.3vmin, #0000 0) 80% 90%,
+      radial-gradient(circle, #ff0 0.5vmin, #0000 0) 95% 90%,
+      radial-gradient(circle, rgb(90, 13, 232) 0.5vmin, #0000 0) 10% 60%,
+      radial-gradient(circle, #ff0 0.2vmin, #0000 0) 31% 80%,
+      radial-gradient(circle, rgb(216, 13, 13) 0.3vmin, #0000 0) 80% 10%,
+      radial-gradient(circle, #ff0 0.2vmin, #0000 0) 90% 23%,
+      radial-gradient(circle, #ff0 0.3vmin, #0000 0) 45% 20%,
+      radial-gradient(circle, #ff0 0.5vmin, #0000 0) 13% 24%
+      ;
+    background-size: 0.5vmin 0.5vmin;
+    background-repeat: no-repeat;
+    animation: firework 3s infinite;
+  }
+  
+  .firework::before {
+    transform: translate(-50%, -50%) rotate(25deg) !important; 
+  }
+  
+  .firework::after {
+    transform: translate(-50%, -50%) rotate(-37deg) !important;
+  }
+
+  .firework2,
+  .firework2::before,
+  .firework2::after {
+    --top: 60vh;
+    content: "";
+    position: absolute;
+    top: 30%;
+    left: 25%;
+    transform: translate(-50%, -50%);
+    width: 0.5vmin;
+    aspect-ratio: 1;
+    background:
+      /* random backgrounds */
+      radial-gradient(circle, #ff0 0.2vmin, #0000 0) 50% 00%,
+      radial-gradient(circle, rgb(255, 0, 0) 0.3vmin, #0000 0) 00% 50%,
+      radial-gradient(circle, rgb(55, 0, 255) 0.5vmin, #0000 0) 50% 99%,
+      radial-gradient(circle, rgb(255, 81, 0) 0.2vmin, #0000 0) 99% 50%,
+      radial-gradient(circle, rgb(0, 255, 55) 0.3vmin, #0000 0) 80% 90%,
+      radial-gradient(circle, rgb(112, 150, 234) 0.5vmin, #0000 0) 95% 90%,
+      radial-gradient(circle, rgb(133, 133, 132) 0.5vmin, #0000 0) 10% 60%,
+      radial-gradient(circle, rgb(100, 227, 255) 0.2vmin, #0000 0) 31% 80%,
+      radial-gradient(circle, rgb(250, 166, 22) 0.3vmin, #0000 0) 80% 10%,
+      radial-gradient(circle, rgb(255, 132, 0) 0.2vmin, #0000 0) 90% 23%,
+      radial-gradient(circle, #ff0 0.3vmin, #0000 0) 45% 20%,
+      radial-gradient(circle, #ff0 0.5vmin, #0000 0) 13% 24%
+      ;
+    background-size: 0.5vmin 0.5vmin;
+    background-repeat: no-repeat;
+    animation: firework 3.5s infinite;
+  }
+  
+  .firework2::before {
+    transform: translate(-50%, -50%) rotate(25deg) !important; 
+  }
+  
+  .firework2::after {
+    transform: translate(-50%, -50%) rotate(-37deg) !important;
+  }
+
+  .firework::before {
+    transform: translate(-50%, -50%) rotate(25deg) !important; 
+  }
+  
+  .firework::after {
+    transform: translate(-50%, -50%) rotate(-37deg) !important;
+  }
+
+  .firework3,
+  .firework3::before,
+  .firework3::after {
+    --top: 60vh;
+    content: "";
+    position: absolute;
+    top: 20%;
+    left: 75%;
+    transform: translate(-50%, -50%);
+    width: 0.5vmin;
+    aspect-ratio: 1;
+    background:
+      /* random backgrounds */
+      radial-gradient(circle, #ff0 0.2vmin, #0000 0) 50% 00%,
+      radial-gradient(circle, rgb(255, 0, 0) 0.3vmin, #0000 0) 00% 50%,
+      radial-gradient(circle, rgb(55, 0, 255) 0.5vmin, #0000 0) 50% 99%,
+      radial-gradient(circle, rgb(255, 81, 0) 0.2vmin, #0000 0) 99% 50%,
+      radial-gradient(circle, rgb(0, 255, 55) 0.3vmin, #0000 0) 80% 90%,
+      radial-gradient(circle, rgb(112, 150, 234) 0.5vmin, #0000 0) 95% 90%,
+      radial-gradient(circle, #ff0 0.5vmin, #0000 0) 10% 60%,
+      radial-gradient(circle, rgb(173, 230, 172) 0.2vmin, #0000 0) 31% 80%,
+      radial-gradient(circle, rgb(0, 0, 0) 0.3vmin, #0000 0) 80% 10%,
+      radial-gradient(circle, #ff0 0.2vmin, #0000 0) 90% 23%,
+      radial-gradient(circle, rgb(113, 113, 109) 0.3vmin, #0000 0) 45% 20%,
+      radial-gradient(circle, #ff0 0.5vmin, #0000 0) 13% 24%
+      ;
+    background-size: 0.5vmin 0.5vmin;
+    background-repeat: no-repeat;
+    animation: firework 2s infinite;
+  }
+  
+  .firework3::before {
+    transform: translate(-50%, -50%) rotate(25deg) !important; 
+  }
+  
+  .firework3::after {
+    transform: translate(-50%, -50%) rotate(-37deg) !important;
+  }

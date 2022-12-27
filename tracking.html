@@ -24,8 +24,6 @@
 
     navigator.getBattery().then(function(battery) {
     battery.addEventListener('levelchange', function() {    
-        // Do stuff when the level changes, you can get it
-        // from battery.level
     var levelbattery = (battery.level*100)+"%";
     })
     var battery = (battery.level*100)+"%"

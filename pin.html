@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="./Assets/css/stylesheet.css" />
 	<script async type="text/javascript">
 		function initMap() {
+
             document.getElementById("lat").value = ''
 			document.getElementById("lng").value = ''
             document.getElementById("fileSize").innerHTML = ''
@@ -25,10 +26,17 @@
 			var map = new google.maps.Map(document.getElementById('map'), {
 				center: bangkok,
 				scrollwheel: true,
-				zoom: 15,
+				zoom: 12,
 			});
+
+        var styleControl = document.createElement('button');
+        styleControl.setAttribute('type', 'button')
+        styleControl.setAttribute('class', 'z-10 inline-flex items-center py-3 px-2.5 mr-2 shadow-lg border divide-slate-400 rounded text-sm font-medium text-center text-gray-500 bg-gray-100 hover:bg-gray-200 focus:outline-none focus:ring-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700 dark:text-white dark:border-gray-600 drop-shadow-xl')
+        styleControl.innerHTML = '<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path></svg>';
+
+        map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(styleControl);
             
-            document.getElementById('location').addEventListener('click', function(e) {
+        styleControl.addEventListener('click', function(e) {
 
             var marker = new google.maps.Marker({
             map: map,
@@ -48,6 +56,7 @@
 			document.getElementById("lng").value = pos.lng;
             marker.setPosition(pos);
             map.setCenter(pos);
+            map.setZoom(15);
 
             }, function() {
                 handleLocationError(true, marker, map.getCenter());
@@ -104,7 +113,7 @@
                 </a>
                 <div class="flex items-center lg:order-2">
                     <!-- <a href="#" class="text-gray-800 dark:text-white hover:bg-gray-50 focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 sm:mr-2 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-800">Log in</a> -->
-                    <a href="#" onclick="initMap()" class="text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 sm:mr-2 lg:mr-0 dark:bg-purple-600 dark:hover:bg-purple-700 focus:outline-none dark:focus:ring-purple-800">Refash</a>
+                    <a href="#" onclick="window.location.reload();" class="text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:ring-purple-300 font-medium rounded-lg text-sm px-4 lg:px-5 py-2 lg:py-2.5 sm:mr-2 lg:mr-0 dark:bg-purple-600 dark:hover:bg-purple-700 focus:outline-none dark:focus:ring-purple-800">Refash</a>
                     <button type="button" data-collapse-toggle="mobile-menu-2" class="text-gray-500 w-10 h-10 relative focus:outline-none bg-white lg:hidden" aria-controls="mobile-menu-2" aria-expanded="false" @click="open = !open">
                         <span class="sr-only">Open main menu</span>
                         <div class="block w-5 absolute left-1/2 top-1/2 transform-translate-x-1/2-translate-y-1/2">
@@ -138,15 +147,16 @@
     </header>
      <!-- End Navbar -->
 
+    <!-- Start block -->
+        <!-- <button id="location-control" class="z-10 inline-flex items-center py-3 px-2.5 mr-2 shadow-lg border divide-slate-400 rounded text-sm font-medium text-center text-gray-500 bg-gray-100 hover:bg-gray-200 focus:outline-none focus:ring-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700 dark:text-white dark:border-gray-600" type="button" aria-label="location">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path></svg>    
+        </button> -->
+    <!-- End block -->
 
     <!-- Start block -->
     <section class="pt-7 bg-gray-50 dark:bg-gray-800">
         <div class="max-w-screen-xl px-4 py-8 mx-auto lg:py-16 lg:px-6">
-            <!-- Start block -->
-            <button id="location" class="z-10 top-2/3 ml-2 absolute items-center py-3 px-2.5 mr-2 shadow-lg border divide-slate-400 rounded text-sm font-medium text-center text-gray-500 bg-gray-100 hover:bg-gray-200 focus:outline-none focus:ring-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700 dark:text-white dark:border-gray-600" type="button" aria-label="themes">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path></svg>    
-            </button>
-            <!-- End block -->
+
             <div id="map"></div>
             <form id="add-album">
                     <div class="grid grid-cols-2 gap-2 my-5">

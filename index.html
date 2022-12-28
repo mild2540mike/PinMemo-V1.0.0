@@ -178,15 +178,23 @@
                 map.setZoom(15);
             })
             for (m = 0; m < Images.length; m++) {
+                console.log(Images[m])
                 el.innerHTML += 
-                `<div class="flex flex-wrap w-1/3">
-                    <div class="w-full p-1 md:p-2">
-                        <img alt="gallery" class="block object-cover object-center cursor-pointer w-full h-full rounded-lg"
-                         src="${Images[m]}">
-                         <input id="list_lat" type="hidden" value="${List[m].lat}">
-                         <input id="list_lng" type="hidden" value="${List[m].lng}">
+
+                `<li class="flex flex-col items-center space-y-1 ">
+                    <div class="relative bg-gradient-to-tr from-yellow-400 to-purple-600 p-1 rounded-full">
+                        <a href="#" class="block bg-white p-1 rounded-full transform transition hover:scale-125">
+                            <img class="w-30 h-24 rounded-full" src="${Images[m]}" alt="cute kitty"/>
+                            <input id="list_lat" type="hidden" value="${List[m].lat}">
+                            <input id="list_lng" type="hidden" value="${List[m].lng}">
+                        </a>
+                        ${((m==0)? '<a href="./pin.html" type="button" class="absolute bg-blue-500 text-white text-2xl cursor-pointer font-medium w-8 h-8 rounded-full bottom-0 right-1 border-4 border-white flex justify-center items-center font-mono hover:bg-blue-700 focus:outline-none"><div class="transform -translate-y-px">+</div></a>' : '')}
+
                     </div>
-                </div>`;
+                    <a href="#">kitty_one</a>
+                </li>`
+
+
             }
             /********************************************************************/
             /********************* End get localStorage Images*******************/
@@ -262,12 +270,12 @@
     <!-- End block -->
 
     <!-- Start block -->
-    <section class="overflow-hidden text-gray-700 lg:px-36">
-        <div class="container px-5 py-2 mx-auto lg:pt-12 lg:px-32">
-          <div id="images-list" class="flex flex-wrap -m-1 md:-m-2">
-          </div>
-        </div>
-    </section>
+    <div class="max-w-2xl mx-auto p-8">
+        <p class="text-5xl lg:text-6xl leading-none font-extrabold text-gray-900 mb-8 mt-4">Our stories.</p>
+        <ul id="images-list" class="flex space-x-6 overflow-y-scroll">
+        </ul>
+      </div>
+    <!-- End block -->
     <!-- End block -->
     <!-- Start block -->
     <section class="bg-gray-50 dark:bg-gray-800">

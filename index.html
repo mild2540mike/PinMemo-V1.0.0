@@ -25,7 +25,6 @@
         speechSynthesis.speak(msg);
         }
 
-
 		function initMap(e) {
             const btn = document.getElementById('clearCache')
             btn.addEventListener('click', (event) => {
@@ -82,13 +81,6 @@
             localStorage.setItem('Firestore', JSON.stringify(snap.val()));
         });
         firebase.database().ref('ImagesAlbum').on('value',(snap)=>{
-
-            // var ImagesURL = Object.values(snap.val());
-            // for (var i = 0 ; i < Images.length; i++) {
-            //     console.log(ImagesURL[i])
-
-            // }
-
             localStorage.setItem('Imagestore', JSON.stringify(snap.val()));
         });
         /********************************************************************/
@@ -146,15 +138,7 @@
 			});
             info.open(map, marker);
 
-            // document.getElementById('images-list').onclick = (e) => {
-            // if (e.path[0].localName === 'img') {
-            //     // console.log(e)
-            //     map.setCenter({lat: lat, lng: lng});
-            // }
-            // return false;
-            //         }
             }
-
         /********************************************************************/
         /****************** End get localStorage Google map******************/
         /********************************************************************/
@@ -173,28 +157,23 @@
             button.addEventListener('click', (event) => {
                 var lat = Number(event.srcElement.parentElement.querySelector('input#list_lat').value);
                 var lng = Number(event.srcElement.parentElement.querySelector('input#list_lng').value);
-                // console.log(lat, lng);
                 map.setCenter({lat: lat, lng: lng});
                 map.setZoom(15);
             })
             for (m = 0; m < Images.length; m++) {
-                console.log(Images[m])
                 el.innerHTML += 
-
                 `<li class="flex flex-col items-center space-y-1 ">
                     <div class="relative bg-gradient-to-tr from-yellow-400 to-purple-600 p-1 rounded-full">
-                        <a href="#" class="block bg-white p-1 rounded-full transform transition hover:scale-125">
+                        <div class="block bg-white p-1 cursor-pointer rounded-full transform transition hover:scale-125">
                             <img class="w-30 h-24 rounded-full" src="${Images[m]}" alt="cute kitty"/>
                             <input id="list_lat" type="hidden" value="${List[m].lat}">
                             <input id="list_lng" type="hidden" value="${List[m].lng}">
-                        </a>
+                        </div>
                         ${((m==0)? '<a href="./pin.html" type="button" class="absolute bg-blue-500 text-white text-2xl cursor-pointer font-medium w-8 h-8 rounded-full bottom-0 right-1 border-4 border-white flex justify-center items-center font-mono hover:bg-blue-700 focus:outline-none"><div class="transform -translate-y-px">+</div></a>' : '')}
 
                     </div>
                     <a href="#">kitty_one</a>
                 </li>`
-
-
             }
             /********************************************************************/
             /********************* End get localStorage Images*******************/
@@ -234,10 +213,10 @@
                 <div class="items-center justify-between hidden w-full lg:flex lg:w-auto lg:order-1" id="mobile-menu-2">
                     <ul class="flex flex-col mt-4 font-medium lg:flex-row lg:space-x-8 lg:mt-0">
                         <li>
-                            <a href="./index.html" class="block py-2 pl-3 pr-4 text-white bg-purple-700 rounded lg:bg-transparent lg:text-purple-700 lg:p-0 dark:text-white">🏠Home</a>
+                            <a href="./index.html" class="block py-2 pl-3 pr-4 text-white bg-purple-700 rounded lg:bg-transparent lg:text-purple-700 lg:p-0 dark:text-white">Home</a>
                         </li>
                         <li>
-                            <a href="./pin.html" class="block py-2 pl-3 pr-4 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-purple-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700">Pin</a>
+                            <a href="./pin.html" class="block py-2 pl-3 pr-4 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-purple-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700">Location</a>
                         </li>
                         <li>
                             <a href="./404.html" class="block py-2 pl-3 pr-4 text-gray-700 border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 lg:hover:text-purple-700 lg:p-0 dark:text-gray-400 lg:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white lg:dark:hover:bg-transparent dark:border-gray-700">Story</a>
@@ -270,7 +249,7 @@
     <!-- End block -->
 
     <!-- Start block -->
-    <div class="max-w-2xl mx-auto p-8">
+    <div class="max-w-xl mx-auto p-8">
         <p class="text-5xl lg:text-6xl leading-none font-extrabold text-gray-900 mb-8 mt-4">Our stories.</p>
         <ul id="images-list" class="flex space-x-6 overflow-y-scroll">
         </ul>

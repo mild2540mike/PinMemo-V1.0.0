@@ -176,9 +176,6 @@
         Images = Object.values(ImagesAlbum);
 
         for (m = 0; m < Images.length; m++) {
-            console.log(Images[m])
-           
-            // console.log(List[m]);
             el.innerHTML += 
             `<li class="flex flex-col items-center space-y-1 ">
                 <div onclick="indexImages(${m});" class="relative bg-gradient-to-tr from-yellow-400 to-purple-600 p-1 rounded-full" data-modal-toggle="medium-modal">
@@ -196,10 +193,23 @@
 
         }
         function indexImages(m) {
-            console.log(m);
-            imglist.innerHTML = `<li class="flex flex-col items-center space-y-1 "><img class="sticky" id='imglist' src='${Images[m]}' alt="Album"></li>`;
+            const index = Images.length-1;
+            imglist.innerHTML = `<li class="flex flex-col items-center space-y-1 "><img class="sticky" id='imglist' src='${Images[m]}' alt="Album">
+            <button onclick="indexImages(${m-1})" type="button" class="absolute ${((m == 0)? 'hidden': 'block')} top-0 left-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none" data-carousel-prev>
+                <span class="inline-flex items-center justify-center w-8 h-8 rounded-full sm:w-10 sm:h-10 bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
+                    <svg aria-hidden="true" class="w-5 h-5 text-white sm:w-6 sm:h-6 dark:text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                    <span class="sr-only">Previous</span>
+                </span>
+            </button>
+            <button onclick="indexImages(${m+1})" type="button" class="absolute ${((m == index)? 'hidden': 'block')} top-0 right-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none" data-carousel-next>
+                <span class="inline-flex items-center justify-center w-8 h-8 rounded-full sm:w-10 sm:h-10 bg-white/30 dark:bg-gray-800/30 group-hover:bg-white/50 dark:group-hover:bg-gray-800/60 group-focus:ring-4 group-focus:ring-white dark:group-focus:ring-gray-800/70 group-focus:outline-none">
+                    <svg aria-hidden="true" class="w-5 h-5 text-white sm:w-6 sm:h-6 dark:text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                    <span class="sr-only">Next</span>
+                </span>
+            </button></li>`;
         }
             
+
             // el.addEventListener('click', (event) => {
             //     document.getElementById('comment').setAttribute('class', 'bg-gray-50 dark:bg-gray-800');
             //     text1.innerHTML = `<p id="text1" class="font-extralight">${List[2].place_name}</p>`

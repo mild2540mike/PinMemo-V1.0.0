@@ -73,13 +73,30 @@
     <!-- Start block -->
     <div class="max-w-xl mx-auto p-8">
         <p class="text-5xl lg:text-6xl leading-none font-extrabold text-gray-900 mb-8 mt-5">Our stories.</p>
-        <ul id="images-list" class="flex space-x-6 overflow-y-scroll">
+        <ul id="images-list" class="flex no-scrollbar space-x-6 overflow-y-scroll">
         </ul>
       </div>
     <!-- End block -->
 
+
+    <!-- Default Modal -->
+    <div id="medium-modal" tabindex="-1" class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-modal md:h-full">
+        <div class="relative w-full h-full max-w-lg md:h-auto">
+            <!-- Modal content -->
+    
+                <!-- Modal header -->
+
+                <!-- Modal body -->
+                <ul id="img-list" class="flex no-scrollbar space-x-6 overflow-x-scroll"></ul>
+                <!-- Modal footer -->
+
+
+        </div>
+    </div>
+    <!-- End block -->
+
     <!-- Start block -->
-    <section id="comment" class="bg-gray-50 dark:bg-gray-800 hidden">
+    <!-- <section id="comment" class="bg-gray-50 dark:bg-gray-800 hidden">
         <div class="max-w-screen-xl px-4 py-8 mx-auto lg:py-16 lg:px-6">
             <div class="max-w-screen-sm mx-auto grid grid-cols-2 gap-5">
                 <div>
@@ -91,7 +108,7 @@
                 </div>
             </div>
         </div>
-    </section>
+    </section> -->
     <!-- End block -->
 
     <!-- Footer -->
@@ -151,6 +168,7 @@
         /********************************************************************/
         const el = document.getElementById('images-list');
         const text1 = document.getElementById('text1');
+        const imglist = document.getElementById('img-list');
         let list = JSON.parse(localStorage.getItem('Firestore'))
         var List = Object.values(list);
         let ImagesAlbum = JSON.parse(localStorage.getItem('Imagestore'));
@@ -158,10 +176,12 @@
         Images = Object.values(ImagesAlbum);
 
         for (m = 0; m < Images.length; m++) {
-            console.log(List[m]);
+            console.log(Images[m])
+           
+            // console.log(List[m]);
             el.innerHTML += 
             `<li class="flex flex-col items-center space-y-1 ">
-                <div class="relative bg-gradient-to-tr from-yellow-400 to-purple-600 p-1 rounded-full">
+                <div onclick="indexImages(${m});" class="relative bg-gradient-to-tr from-yellow-400 to-purple-600 p-1 rounded-full" data-modal-toggle="medium-modal">
                     <div class="block bg-white p-1 cursor-pointer rounded-full transform transition hover:scale-125">
                         <img class="w-30 h-24 rounded-full" src="${Images[m]}" alt="cute kitty"/>
                         <input id="list_lat" type="hidden" value="${List[m].lat}">
@@ -171,11 +191,14 @@
                 </div>
                 <a href="#">kitty_one</a>
             </li>`;
-
+           
            
 
         }
-
+        function indexImages(m) {
+            console.log(m);
+            imglist.innerHTML = `<li class="flex flex-col items-center space-y-1 "><img class="sticky" id='imglist' src='${Images[m]}' alt="Album"></li>`;
+        }
             
             // el.addEventListener('click', (event) => {
             //     document.getElementById('comment').setAttribute('class', 'bg-gray-50 dark:bg-gray-800');

@@ -10,45 +10,9 @@
     <link rel="stylesheet" href="https://unpkg.com/tailwindcss@2.2.19/dist/tailwind.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="./Assets/css/stylesheet.css" />
-    <script>
-        // JavaScript code
-        document.addEventListener("DOMContentLoaded", function() {
-        var preload = document.querySelector(".preload");
-        var container = document.querySelector(".container");
-        // Fade out the preload element and fade in the container element
-        function fadeOutPreload() {
-            var opacity = 1;
-            var interval = setInterval(function() {
-            opacity -= 0.01;
-            preload.style.opacity = opacity;
-            if (opacity <= 0) {
-                clearInterval(interval);
-            }
-                }, 20);
-            }
-        fadeOutPreload();
-        });
-        </script>
 </head>
 <body>
-    <!-- loading -->
-    <span class="preload">
-        <svg class="pl" viewBox="0 0 200 200" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-                <linearGradient id="pl-grad1" x1="1" y1="0.5" x2="0" y2="0.5">
-                    <stop offset="0%" stop-color="hsl(313,90%,55%)" />
-                    <stop offset="100%" stop-color="hsl(223,90%,55%)" />
-                </linearGradient>
-                <linearGradient id="pl-grad2" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stop-color="hsl(313,90%,55%)" />
-                    <stop offset="100%" stop-color="hsl(223,90%,55%)" />
-                </linearGradient>
-            </defs>
-            <circle class="pl__ring" cx="100" cy="100" r="82" fill="none" stroke="url(#pl-grad1)" stroke-width="36" stroke-dasharray="0 257 1 257" stroke-dashoffset="0.01" stroke-linecap="round" transform="rotate(-90,100,100)" />
-            <line class="pl__ball" stroke="url(#pl-grad2)" x1="100" y1="18" x2="100.01" y2="182" stroke-width="36" stroke-dasharray="1 165" stroke-linecap="round" />
-        </svg>
-    </span>
-    
+
     <!-- Navbar -->
     <header class="fixed w-full z-40">
         <nav class="bg-white border-gray-200 py-2.5 dark:bg-gray-900" x-data="{ open: false }">
@@ -326,37 +290,41 @@
     <!--*******************************************************************-->
     
     <script>
-    const comingdate = new Date("Aug 24, 2021 23:59:59");
+        const comingdate = new Date("Aug 24, 2021 23:59:59");
 
-    const y = document.getElementById("y");
-    const mo = document.getElementById("mo");
-    const d = document.getElementById("d");
-    const h = document.getElementById("h");
-    const m = document.getElementById("m");
-    const s = document.getElementById("s");
-    const pos = document.getElementById("posDate");
+        const y = document.getElementById("y");
+        const mo = document.getElementById("mo");
+        const d = document.getElementById("d");
+        const h = document.getElementById("h");
+        const m = document.getElementById("m");
+        const s = document.getElementById("s");
+        const pos = document.getElementById("posDate");
 
-    const countdown = setInterval(() => {
-    const now = new Date();
-    const des = now.getTime() - comingdate.getTime();
-    const years = Math.floor((des / (1000 * 60 * 60 * 24)) / 365);
-    const months = Math.floor((des / (1000 * 60 * 60 * 24)) / 30) % 12;
-    const days = Math.floor(des / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((des % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-    const mins = Math.floor((des % (1000 * 60 * 60)) / (1000 * 60));
-    const secs = Math.floor((des % (1000 * 60)) / 1000);
+        const countdown = setInterval(() => {
+        const now   = new Date();
+        const des   = now.getTime() - comingdate.getTime();
+        const years  = ((des / (1000 * 60 * 60 * 24))/30/12).toFixed(1).slice(0,1)
+        const months  = ((des / (1000 * 60 * 60 * 24))/30/12).toFixed(1).slice(2)
+        // const months  = Math.floor((des / (1000 * 60 * 60 * 24))/30);
+        const days  = Math.floor(des / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((des % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const mins  = Math.floor((des % (1000 * 60 * 60)) / (1000 * 60));
+        const secs  = Math.floor((des % (1000 * 60)) / 1000);
 
-    y.innerHTML = getTrueNumber(years);
-    mo.innerHTML = getTrueNumber(months);
-    d.innerHTML = getTrueNumber(days);
-    h.innerHTML = getTrueNumber(hours);
-    m.innerHTML = getTrueNumber(mins);
-    s.innerHTML = getTrueNumber(secs);
+        // pos.innerHTML = now.toString().substring(4, 21);
+        y.innerHTML = getTrueNumber(years);
+        mo.innerHTML = getTrueNumber(months);
+        d.innerHTML = getTrueNumber(days);
+        h.innerHTML = getTrueNumber(hours);
+        m.innerHTML = getTrueNumber(mins);
+        s.innerHTML = getTrueNumber(secs);
 
-    if (des <= 0) clearInterval(countdown);
-    }, 1000);
+        x = null;
+        if (x <= 0) clearInterval(x);
+        }, 1000);
 
-    const getTrueNumber = x => (x > 9 ? x : "0" + x);
+        const getTrueNumber = x => (x > 1 ? x : x);
+
 
 // **********************************************************************************************************************************************************
 // **********************************************************************************************************************************************************
@@ -534,8 +502,9 @@
                     }
                 }
             }
-    </script>
+            
 
-    <script src="./script"></script>
+
+    </script>
 </body>
 </html>

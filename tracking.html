@@ -577,13 +577,16 @@
     <!--*************************** redirect *******************************-->
     <!--********************************************************************-->
     <script>
-        window.addEventListener("DOMContentLoaded", function() {
-        var currentUrl = window.location.href;
-        var modifiedUrl = currentUrl.replace(".html", "")
+        const domainName = window.location.hostname;
+        if (domainName !== '127.0.0.1') {
+            window.addEventListener("DOMContentLoaded", function () {
+                var currentUrl = window.location.href;
+                var modifiedUrl = currentUrl.replace(".html", "")
 
-        // Replace the current URL without ".html" extension
-        window.history.replaceState(null, null, modifiedUrl)
-        })
+                // Replace the current URL without ".html" extension
+                window.history.replaceState(null, null, modifiedUrl)
+            })
+        }
     </script>
 
     <!--********************************************************************-->

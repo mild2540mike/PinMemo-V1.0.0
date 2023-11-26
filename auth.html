@@ -1,61 +1,65 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Pin it place we go., ค้นหาสถานที่ ที่เราไปเที่ยวด้วยกัน ปักหมุดมันเพื่อเก็บเป็นความทรงจำของเรา เพราะว่าทุกๆ ความทรงจำนั้นมีความหมายเป็นสิ่งเตือนใจของเรา">
-    <title>Pin it go</title>
-    <link type="image/png" sizes="16x16" rel="icon" href="./Images/icons8-icons8-16.png">
-    <link rel="stylesheet" href="https://unpkg.com/tailwindcss@2.2.19/dist/tailwind.min.css" />
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <link rel="stylesheet" href="./Assets/css/stylesheet.css" />
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description"
+    content="Pin it place we go., ค้นหาสถานที่ ที่เราไปเที่ยวด้วยกัน ปักหมุดมันเพื่อเก็บเป็นความทรงจำของเรา เพราะว่าทุกๆ ความทรงจำนั้นมีความหมายเป็นสิ่งเตือนใจของเรา">
+  <title>Pin it go</title>
+  <link type="image/png" sizes="16x16" rel="icon" href="./Images/icons8-icons8-16.png">
+  <link rel="stylesheet" href="https://unpkg.com/tailwindcss@2.2.19/dist/tailwind.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <link rel="stylesheet" href="./Assets/css/stylesheet.css" />
 
 </head>
+
 <body>
 
-    <form>
-        <label for="email">Email:</label><br>
-        <input type="email" id="email" name="email"><br>
-        <label for="password">Password:</label><br>
-        <input type="password" id="password" name="password"><br><br>
-        <button type="submit">Log In</button>
-      </form>
+  <form>
+    <label for="email">Email:</label><br>
+    <input type="email" id="email" name="email"><br>
+    <label for="password">Password:</label><br>
+    <input type="password" id="password" name="password"><br><br>
+    <button type="submit">Log In</button>
+  </form>
 
-    <script src="https://www.gstatic.com/firebasejs/7.18.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/7.18.0/firebase-auth.js"></script>
-      <script>
-        // Your web app's Firebase configuration
-                var firebaseConfig = {
-          apiKey: "AIzaSyC2bk_tt33GSevRqYsdgBsoCHMEKSGJIBw",
-          authDomain: "crud-realtime-db-8eeea.firebaseapp.com",
-          databaseURL: "https://crud-realtime-db-8eeea-default-rtdb.asia-southeast1.firebasedatabase.app",
-          projectId: "crud-realtime-db-8eeea",
-          storageBucket: "crud-realtime-db-8eeea.appspot.com",
-          messagingSenderId: "1018640586140",
-          appId: "1:1018640586140:web:755462bb0486b42ab9a459",
-          measurementId: "G-2NFFEGPH95"
-        };
-        // Initialize Firebase
-        firebase.initializeApp(firebaseConfig);
+  <script src="https://www.gstatic.com/firebasejs/7.18.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.18.0/firebase-auth.js"></script>
+  <script>
+    // Your web app's Firebase configuration
+    var firebaseConfig = {
+      apiKey: "AIzaSyC2bk_tt33GSevRqYsdgBsoCHMEKSGJIBw",
+      authDomain: "crud-realtime-db-8eeea.firebaseapp.com",
+      databaseURL: "https://crud-realtime-db-8eeea-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "crud-realtime-db-8eeea",
+      storageBucket: "crud-realtime-db-8eeea.appspot.com",
+      messagingSenderId: "1018640586140",
+      appId: "1:1018640586140:web:755462bb0486b42ab9a459",
+      measurementId: "G-2NFFEGPH95"
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
 
-        const form = document.querySelector('form');
-        form.addEventListener('submit', (event) => {
-          event.preventDefault();
-      
-          const email = document.querySelector('#email').value;
-          const password = document.querySelector('#password').value;
-      
-          firebase.auth().signInWithEmailAndPassword(email, password).then((e) => {
-            // Logged in successfully
-            alert('Logged in successfully');
-            console.log(e)
-            // window.open('./home.html')
-          }).catch((error) => {
-            // An error occurred
-            alert(error.message);
-          });
-        });
-      </script>
+    const form = document.querySelector('form');
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+
+      const email = document.querySelector('#email').value;
+      const password = document.querySelector('#password').value;
+
+      firebase.auth().signInWithEmailAndPassword(email, password).then((e) => {
+        // Logged in successfully
+        alert('Logged in successfully');
+        console.log(e)
+        // window.open('./home.html')
+      }).catch((error) => {
+        // An error occurred
+        alert(error.message);
+      });
+    });
+  </script>
 </body>
+
 </html>

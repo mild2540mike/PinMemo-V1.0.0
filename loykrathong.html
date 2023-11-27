@@ -23,24 +23,6 @@
             zoom: 17
         });
 
-    navigator.getBattery().then(function(battery) {
-    battery.addEventListener('levelchange', function() {    
-    var levelbattery = (battery.level*100)+"%";
-    })
-    var battery = (battery.level*100)+"%"
-    document.getElementById('battery').value = battery
-    });
-
-    let batteryIsCharging = false;
-    navigator.getBattery().then((battery) => {
-    batteryIsCharging = battery.charging;
-    document.getElementById('charging').value = ((batteryIsCharging == true) ? 'charging' : 'no charging');
-      battery.addEventListener('chargingchange', () => {
-       batteryIsCharging = battery.charging;
-      });
-    });
-
-
         document.getElementById('btnconnect').addEventListener("click", (e) => {
         
         // let speed = document.querySelector('input#speed').value;
@@ -77,8 +59,6 @@
                     lng: position.coords.longitude
                 };
 
-                var speed = parseInt(position.coords.speed * 3.6);
-                var statusdevices = navigator.onLine;
 
                 marker.setPosition(pos);
                 map.setCenter(pos);

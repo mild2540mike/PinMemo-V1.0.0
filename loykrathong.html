@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Pin it place we go., ค้นหาสถานที่ ที่เราไปเที่ยวด้วยกัน ปักหมุดมันเพื่อเก็บเป็นความทรงจำของเรา เพราะว่าทุกๆ ความทรงจำนั้นมีความหมายเป็นสิ่งเตือนใจของเรา">
+    <title>Pin it go</title>
+    <link type="image/png" sizes="16x16" rel="icon" href="./Images/icons8-icons8-16.png">
+    <link rel="stylesheet" href="https://unpkg.com/tailwindcss@2.2.19/dist/tailwind.min.css" />
+    <link rel="stylesheet" href="./Assets/css/stylesheet.css">
+    <script src="https://unpkg.com/flowbite@1.5.4/dist/datepicker.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link rel="stylesheet" href="./Assets/css/stylesheet.css" />
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+	<script async type="text/javascript">
+
+    var map;
+
+    function initMap() {
+        map = new google.maps.Map(document.getElementById('map'), {
+            center: {lat: 13.8002833, lng: 100.5400389},
+            zoom: 17
+        });
+
+    navigator.getBattery().then(function(battery) {
+    battery.addEventListener('levelchange', function() {    
+    var levelbattery = (battery.level*100)+"%";
+    })
+    var battery = (battery.level*100)+"%"
+    document.getElementById('battery').value = battery
+    });
+
+    let batteryIsCharging = false;
+    navigator.getBattery().then((battery) => {
+    batteryIsCharging = battery.charging;
+    document.getElementById('charging').value = ((batteryIsCharging == true) ? 'charging' : 'no charging');
+      battery.addEventListener('chargingchange', () => {
+       batteryIsCharging = battery.charging;
+      });
+    });
+
+
+        document.getElementById('btnconnect').addEventListener("click", (e) => {
+        
+        // let speed = document.querySelector('input#speed').value;
+        // let batterys =  document.querySelector('input#battery').value;
+        // let chargings =  document.querySelector('input#charging').value;
+        let name = document.getElementById('name').value
+        let message = document.getElementById('message').value
+
+        if (!name || !message) {
+            return alert('กรุณากรอกข้อมูลให้ครบถ้วน')
+        }
+
+        const contentString =
+            `<div id="content">
+            </div>
+            <h1 id="firstHeading" class="firstHeading"><b>${name}</b></h1>
+            <div id="bodyContent">
+            <p>คำอธิฐาน: ${message}</p>
+            <p>(last Update 1 sec.)</p>
+            </div>`;
+
+        const infowindow = new google.maps.InfoWindow({
+            content: contentString,
+            ariaLabel: "Bangkok",
+        });
+            
+        document.getElementById('conn-device').classList.add('hidden');
+        document.getElementById('btnconnect').style.display = "none";
+
+        if (navigator.geolocation) {
+            navigator.geolocation.watchPosition(function (position) {
+                var pos = {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude
+                };
+
+                var speed = parseInt(position.coords.speed * 3.6);
+                var statusdevices = navigator.onLine;
+
+                marker.setPosition(pos);
+                map.setCenter(pos);
+
+                // Function to update position
+                const updatePosition = () => {
+                    pos.lat += 0.0001;
+                    pos.lng += 0.0001;
+                    marker.setPosition(pos);
+                    map.setCenter(pos);
+                }
+
+                setInterval(updatePosition, 1000);
+
+            }, function () {
+                handleLocationError(true, marker, map.getCenter());
+            });
+        } else {
+            handleLocationError(false, marker, map.getCenter());
+        }
+
+        infowindow.open({
+            anchor: marker,
+            map,
+        });
+
+        marker.addListener("click", () => {
+            infowindow.open({
+            anchor: marker,
+            map,
+            });
+        });
+        
+        })
+        // Initialize the marker
+        var marker = new google.maps.Marker({
+            map: map,
+            icon: './Images/krathong-1.png',
+            title: 'Device Location',
+            mapTypeControl: false,
+        });
+
+        const trafficLayer = new google.maps.TrafficLayer();
+        trafficLayer.setMap(map);
+
+        const transitLayer = new google.maps.TransitLayer();
+        transitLayer.setMap(map);
+
+
+        // Add a style-selector control to the map.
+        const styleControl = document.getElementById("style-selector-control");
+
+        map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(styleControl);
+
+        // Set the map's style to the initial value of the selector.
+        const styleSelector = document.getElementById("style-selector-control");
+
+        map.setOptions({ styles: styles[styleSelector.value] });
+        // Apply new JSON when the user selects a different style.
+        styleSelector.addEventListener("click", (e) => {
+
+            var value = parseInt(document.getElementById('number').value, 10);
+            value = isNaN(value) ? 0 : value;
+            value++;
+            const theme = document.getElementById('number').value = value;
+
+            if (theme == 1) {
+                document.getElementById('svgThemes').setAttribute('fill','rgba(59, 130, 246, 0.5)');
+                styleSelector.value = "default";
+                map.setOptions({ styles: styles[styleSelector.value] });
+            } else if (theme == 2) {
+                document.getElementById('svgThemes').setAttribute('fill','silver');
+                styleSelector.value = "silver";
+                map.setOptions({ styles: styles[styleSelector.value] });
+            } else if (theme == 3) {
+                document.getElementById('svgThemes').setAttribute('fill','#ffa31a');
+                styleSelector.value = "night";
+                map.setOptions({ styles: styles[styleSelector.value] });
+            } else if (theme == 4) {
+                document.getElementById('svgThemes').setAttribute('fill','#fff');
+                styleSelector.value = "hiding";
+                map.setOptions({ styles: styles[styleSelector.value] });
+            } else {
+                document.getElementById('svgThemes').setAttribute('fill','yellow');
+                document.getElementById('number').value = 0;
+                value = 0;
+                styleSelector.value = "retro";
+                map.setOptions({ styles: styles[styleSelector.value] });
+            }    
+
+        });
+        }
+
+        const styles = {
+        default: [],
+        silver: [
+        {
+            elementType: "geometry",
+            stylers: [{ color: "#f5f5f5" }],
+        },
+        {
+            elementType: "labels.icon",
+            stylers: [{ visibility: "off" }],
+        },
+        {
+            elementType: "labels.text.fill",
+            stylers: [{ color: "#616161" }],
+        },
+        {
+            elementType: "labels.text.stroke",
+            stylers: [{ color: "#f5f5f5" }],
+        },
+        {
+            featureType: "administrative.land_parcel",
+            elementType: "labels.text.fill",
+            stylers: [{ color: "#bdbdbd" }],
+        },
+        {
+            featureType: "poi",
+            elementType: "geometry",
+            stylers: [{ color: "#eeeeee" }],
+        },
+        {
+            featureType: "poi",
+            elementType: "labels.text.fill",
+            stylers: [{ color: "#757575" }],
+        },
+        {
+            featureType: "poi.park",
+            elementType: "geometry",
+            stylers: [{ color: "#e5e5e5" }],
+        },
+        {
+            featureType: "poi.park",
+            elementType: "labels.text.fill",
+            stylers: [{ color: "#9e9e9e" }],
+        },
+        {
+            featureType: "road",
+            elementType: "geometry",
+            stylers: [{ color: "#ffffff" }],
+        },
+        {
+            featureType: "road.arterial",
+            elementType: "labels.text.fill",
+            stylers: [{ color: "#757575" }],
+        },
+        {
+            featureType: "road.highway",
+            elementType: "geometry",
+            stylers: [{ color: "#dadada" }],
+        },
+        {
+            featureType: "road.highway",
+            elementType: "labels.text.fill",
+            stylers: [{ color: "#616161" }],
+        },
+        {
+            featureType: "road.local",
+            elementType: "labels.text.fill",
+            stylers: [{ color: "#9e9e9e" }],
+        },
+        {
+            featureType: "transit.line",
+            elementType: "geometry",
+            stylers: [{ color: "#e5e5e5" }],
+        },
+        {
+            featureType: "transit.station",
+            elementType: "geometry",
+            stylers: [{ color: "#eeeeee" }],
+        },
+        {
+            featureType: "water",
+            elementType: "geometry",
+            stylers: [{ color: "#c9c9c9" }],
+        },
+        {
+            featureType: "water",
+            elementType: "labels.text.fill",
+            stylers: [{ color: "#9e9e9e" }],
+        },
+        ],
+        night: [
+        { elementType: "geometry", stylers: [{ color: "#242f3e" }] },
+        { elementType: "labels.text.stroke", stylers: [{ color: "#242f3e" }] },
+        { elementType: "labels.text.fill", stylers: [{ color: "#746855" }] },
+        {
+            featureType: "administrative.locality",
+            elementType: "labels.text.fill",
+            stylers: [{ color: "#d59563" }],
+        },
+        {
+            featureType: "poi",
+            elementType: "labels.text.fill",
+            stylers: [{ color: "#d59563" }],
+        },
+        {
+            featureType: "poi.park",
+            elementType: "geometry",
+            stylers: [{ color: "#263c3f" }],
+        },
+        {
+            featureType: "poi.park",
+            elementType: "labels.text.fill",
+            stylers: [{ color: "#6b9a76" }],
+        },
+        {
+            featureType: "road",
+            elementType: "geometry",
+            stylers: [{ color: "#38414e" }],
+        },
+        {
+            featureType: "road",
+            elementType: "geometry.stroke",
+            stylers: [{ color: "#212a37" }],
+        },
+        {
+            featureType: "road",
+            elementType: "labels.text.fill",
+            stylers: [{ color: "#9ca5b3" }],
+        },
+        {
+            featureType: "road.highway",
+            elementType: "geometry",
+            stylers: [{ color: "#746855" }],
+        },
+        {
+            featureType: "road.highway",
+            elementType: "geometry.stroke",
+            stylers: [{ color: "#1f2835" }],
+        },
+        {
+            featureType: "road.highway",
+            elementType: "labels.text.fill",
+            stylers: [{ color: "#f3d19c" }],
+        },
+        {
+            featureType: "transit",
+            elementType: "geometry",
+            stylers: [{ color: "#2f3948" }],
+        },
+        {
+            featureType: "transit.station",
+            elementType: "labels.text.fill",
+            stylers: [{ color: "#d59563" }],
+        },
+        {
+            featureType: "water",
+            elementType: "geometry",
+            stylers: [{ color: "#17263c" }],
+        },
+        {
+            featureType: "water",
+            elementType: "labels.text.fill",
+            stylers: [{ color: "#515c6d" }],
+        },
+        {
+            featureType: "water",
+            elementType: "labels.text.stroke",
+            stylers: [{ color: "#17263c" }],
+        },
+        ],
+        retro: [
+        { elementType: "geometry", stylers: [{ color: "#ebe3cd" }] },
+        { elementType: "labels.text.fill", stylers: [{ color: "#523735" }] },
+        { elementType: "labels.text.stroke", stylers: [{ color: "#f5f1e6" }] },
+        {
+            featureType: "administrative",
+            elementType: "geometry.stroke",
+            stylers: [{ color: "#c9b2a6" }],
+        },
+        {
+            featureType: "administrative.land_parcel",
+            elementType: "geometry.stroke",
+            stylers: [{ color: "#dcd2be" }],
+        },
+        {
+            featureType: "administrative.land_parcel",
+            elementType: "labels.text.fill",
+            stylers: [{ color: "#ae9e90" }],
+        },
+        {
+            featureType: "landscape.natural",
+            elementType: "geometry",
+            stylers: [{ color: "#dfd2ae" }],
+        },
+        {
+            featureType: "poi",
+            elementType: "geometry",
+            stylers: [{ color: "#dfd2ae" }],
+        },
+        {
+            featureType: "poi",
+            elementType: "labels.text.fill",
+            stylers: [{ color: "#93817c" }],
+        },
+        {
+            featureType: "poi.park",
+            elementType: "geometry.fill",
+            stylers: [{ color: "#a5b076" }],
+        },
+        {
+            featureType: "poi.park",
+            elementType: "labels.text.fill",
+            stylers: [{ color: "#447530" }],
+        },
+        {
+            featureType: "road",
+            elementType: "geometry",
+            stylers: [{ color: "#f5f1e6" }],
+        },
+        {
+            featureType: "road.arterial",
+            elementType: "geometry",
+            stylers: [{ color: "#fdfcf8" }],
+        },
+        {
+            featureType: "road.highway",
+            elementType: "geometry",
+            stylers: [{ color: "#f8c967" }],
+        },
+        {
+            featureType: "road.highway",
+            elementType: "geometry.stroke",
+            stylers: [{ color: "#e9bc62" }],
+        },
+        {
+            featureType: "road.highway.controlled_access",
+            elementType: "geometry",
+            stylers: [{ color: "#e98d58" }],
+        },
+        {
+            featureType: "road.highway.controlled_access",
+            elementType: "geometry.stroke",
+            stylers: [{ color: "#db8555" }],
+        },
+        {
+            featureType: "road.local",
+            elementType: "labels.text.fill",
+            stylers: [{ color: "#806b63" }],
+        },
+        {
+            featureType: "transit.line",
+            elementType: "geometry",
+            stylers: [{ color: "#dfd2ae" }],
+        },
+        {
+            featureType: "transit.line",
+            elementType: "labels.text.fill",
+            stylers: [{ color: "#8f7d77" }],
+        },
+        {
+            featureType: "transit.line",
+            elementType: "labels.text.stroke",
+            stylers: [{ color: "#ebe3cd" }],
+        },
+        {
+            featureType: "transit.station",
+            elementType: "geometry",
+            stylers: [{ color: "#dfd2ae" }],
+        },
+        {
+            featureType: "water",
+            elementType: "geometry.fill",
+            stylers: [{ color: "#b9d3c2" }],
+        },
+        {
+            featureType: "water",
+            elementType: "labels.text.fill",
+            stylers: [{ color: "#92998d" }],
+        },
+        ],
+        hiding: [
+        {
+            featureType: "poi.business",
+            stylers: [{ visibility: "off" }],
+        },
+        {
+            featureType: "transit",
+            elementType: "labels.icon",
+            stylers: [{ visibility: "off" }],
+        },
+        ],
+    }
+
+</script>
+
+</head>
+<body>
+
+    <!-- Navbar -->
+    <header class="fixed w-full z-40">
+        <nav class="bg-white border-gray-200 py-2.5 dark:bg-gray-900" x-data="{ open: false }">
+            <div class="flex flex-wrap items-center justify-between max-w-screen-xl px-4 mx-auto">
+                <a href="./loykrathong.html" class="flex items-center">
+                    <img src="./images/krathong-1.png" class="h-6 mr-1 sm:h-9" alt="Landwind Logo" />
+                    <span class="self-center text-xl font-semibold whitespace-nowrap dark:text-white">ลอยกระทง (ส่วนตัว)</span>
+                </a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Start block -->
+    <input type="hidden" id="number" value="0"/>
+    <button value="retro" id="style-selector-control" class="z-10 inline-flex items-center py-3 px-2.5 mr-2 shadow-lg border divide-slate-400 rounded text-sm font-medium text-center text-gray-500 bg-gray-100 hover:bg-gray-200 focus:outline-none focus:ring-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:focus:ring-gray-700 dark:text-white dark:border-gray-600" type="button" aria-label="themes">
+        <svg id="svgThemes" fill="yellow" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path></svg>
+    </button>
+    <!-- End block -->
+
+    <!-- Start block -->
+    <section class="pt-7 bg-gray-50 dark:bg-gray-800 custom-background">
+        <div class="max-w-screen-xl px-4 py-8 mx-auto lg:py-16 lg:px-6">
+            <div id="map"></div>
+            <button id="btnconnect" type="button" class="mt-8 text-gray-900 bg-white hover:bg-gray-100 border border-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2 text-center inline-flex items-center dark:focus:ring-gray-600 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:bg-gray-700 mr-2 mb-2">
+                <!-- <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg> -->
+                ลอยกระทง
+            </button>
+            <form id="conn-device">
+                <div class="col-12">
+                    <div class="mb-6">
+                        <label for="text" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">ชื่อ-นามสกุล</label>
+                        <input type="text" id="name" class="t-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 disabled:bg-slate-50 disabled:text-slate-500 disabled:border-slate-200 disabled:shadow-none" aria-label="appversion" />
+                    </div>
+                    <div class="mb-12">
+                        <label for="block mb-2 text-sm font-medium text-gray-900 dark:text-white">คำอธิฐาน</label>
+                        <textarea id="message" class="t-1 block w-full px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400 focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 disabled:bg-slate-50 disabled:text-slate-500 disabled:border-slate-200 disabled:shadow-none" aria-label="online status"></textarea>
+                    </div>
+                    <div class="mb-12">
+                        <label class="block mb-2 text-lg font-semibold text-gray-900 dark:text-white">หมายเหตุ ผู้พัฒนา</label>
+                        <li>รีบเสร็จรีบทำงานต่อ</li>
+                    </div>                    
+                </div>
+        </form>
+        </div>
+    </section>
+    <!-- End block -->
+
+    <!-- Footer -->
+    <footer class="bg-white dark:bg-gray-800">
+        <div class="max-w-screen-xl p-4 py-6 mx-auto lg:py-16 md:p-8 lg:p-10">
+            <hr class="my-6 border-gray-200 sm:mx-auto dark:border-gray-700 lg:my-8">
+            <div class="text-center">
+                <span class="block text-sm text-center text-gray-500 dark:text-gray-400">สนับสนุน พร้อมเพย์ 🧑🏻‍💻 0925396670</span>
+                <span class="block text-sm text-center text-gray-500 dark:text-gray-400">© 2021-2022 ไปเที่ยวกัน. All Rights Reserved. Built with <a href="https://flowbite.com" class="text-purple-600 hover:underline dark:text-purple-500">Flowbite</a> and <a href="https://tailwindcss.com" class="text-purple-600 hover:underline dark:text-purple-500">Tailwind CSS</a>. Distributed by <a href="#" class="text-purple-600 hover:underline dark:text-purple-500">WaanProduction</a>
+                </span>
+                <ul class="flex justify-center mt-5 space-x-5">
+                    <li>
+                        <a href="#" class="text-gray-500 hover:text-gray-900 dark:hover:text-white dark:text-gray-400" aria-label="facebook">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" clip-rule="evenodd" /></svg>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="text-gray-500 hover:text-gray-900 dark:hover:text-white dark:text-gray-400" aria-label="instagram">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 015.45 2.525c.636-.247 1.363-.416 2.427-.465C8.901 2.013 9.256 2 11.685 2h.63zm-.081 1.802h-.468c-2.456 0-2.784.011-3.807.058-.975.045-1.504.207-1.857.344-.467.182-.8.398-1.15.748-.35.35-.566.683-.748 1.15-.137.353-.3.882-.344 1.857-.047 1.023-.058 1.351-.058 3.807v.468c0 2.456.011 2.784.058 3.807.045.975.207 1.504.344 1.857.182.466.399.8.748 1.15.35.35.683.566 1.15.748.353.137.882.3 1.857.344 1.054.048 1.37.058 4.041.058h.08c2.597 0 2.917-.01 3.96-.058.976-.045 1.505-.207 1.858-.344.466-.182.8-.398 1.15-.748.35-.35.566-.683.748-1.15.137-.353.3-.882.344-1.857.048-1.055.058-1.37.058-4.041v-.08c0-2.597-.01-2.917-.058-3.96-.045-.976-.207-1.505-.344-1.858a3.097 3.097 0 00-.748-1.15 3.098 3.098 0 00-1.15-.748c-.353-.137-.882-.3-1.857-.344-1.023-.047-1.351-.058-3.807-.058zM12 6.865a5.135 5.135 0 110 10.27 5.135 5.135 0 010-10.27zm0 1.802a3.333 3.333 0 100 6.666 3.333 3.333 0 000-6.666zm5.338-3.205a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4z" clip-rule="evenodd" /></svg>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="text-gray-500 hover:text-gray-900 dark:hover:text-white dark:text-gray-400" aria-label="twitter">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84" /></svg>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="text-gray-500 hover:text-gray-900 dark:hover:text-white dark:text-gray-400" aria-label="github">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd" /></svg>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+    <!-- End Footer -->
+
+    <!--********************************************************************-->
+    <!--*************************** redirect *******************************-->
+    <!--********************************************************************-->
+    <script>
+        const domainName = window.location.hostname;
+        if (domainName !== '127.0.0.1') {
+            window.addEventListener("DOMContentLoaded", function () {
+                var currentUrl = window.location.href;
+                var modifiedUrl = currentUrl.replace(".html", "")
+
+                // Replace the current URL without ".html" extension
+                window.history.replaceState(null, null, modifiedUrl)
+            })
+        }
+    </script>
+
+    <!--********************************************************************-->
+    <!--************************** hamburger *******************************-->
+    <!--********************************************************************-->
+    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
+    <!--********************************************************************-->
+    <!--************************ End hamburger *****************************-->
+    <!--********************************************************************-->
+
+    <!--********************************************************************-->
+    <!--************************ Firebase CDN ******************************-->
+    <!--********************************************************************-->
+    <script src="https://www.gstatic.com/firebasejs/8.2.4/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.4/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.4/firebase-storage.js"></script>
+    <!--********************************************************************-->
+    <!--************************ End Firebase CDN **************************-->
+    <!--********************************************************************-->
+
+    <!--********************************************************************-->
+    <!--*************************** flowbite *******************************-->
+    <!--********************************************************************-->
+    <script src="https://unpkg.com/flowbite@1.5.5/dist/flowbite.js"></script>
+    <!--*******************************************************************-->
+    <!--************************* End flowbite ****************************-->
+    <!--*******************************************************************-->
+
+    <!--********************************************************************-->
+    <!--************************* Google Map CDN ***************************-->
+    <!--********************************************************************-->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC_TTKNVl9u2U2LXhKC5QyUrxUg4TsWzvA&callback=initMap" async defer></script>
+    <!--********************************************************************-->
+    <!--*************************End Google Map CDN ************************-->
+    <!--********************************************************************-->
+
+    <!--********************************************************************-->
+    <!--************************ Upload Image CDN **************************-->
+    <!--********************************************************************-->
+    <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
+    <script src="https://unpkg.com/create-file-list"></script>
+    <!--********************************************************************-->
+    <!--*********************** End Upload Image CDN ***********************-->
+    <!--********************************************************************-->
+    
+    <script async type="text/javascript">
+        /********************************************************************/
+        /***************** Setup Environment firebaseConfig *****************/
+        /********************************************************************/
+        var firebaseConfig = {
+            apiKey: "AIzaSyC2bk_tt33GSevRqYsdgBsoCHMEKSGJIBw",
+            authDomain: "crud-realtime-db-8eeea.firebaseapp.com",
+            databaseURL: "https://crud-realtime-db-8eeea-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "crud-realtime-db-8eeea",
+            storageBucket: "crud-realtime-db-8eeea.appspot.com",
+            messagingSenderId: "1018640586140",
+            appId: "1:1018640586140:web:755462bb0486b42ab9a459",
+            measurementId: "G-2NFFEGPH95"
+        };
+        firebase.initializeApp(firebaseConfig);
+        /********************************************************************/
+        /**************** End Setup Environment firebaseConfig **************/
+        /********************************************************************/        
+    </script>
+</body>
+</html>
